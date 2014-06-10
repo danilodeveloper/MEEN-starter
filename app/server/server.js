@@ -18,6 +18,7 @@ app.use(express.static(__dirname + '/web'));
 global.config = require('./config');
 global.constants = require('./constants');
 
+require('./routes/api').bindRoutes(app);
 
 //connect to mongodb
 console.log('INFO: Connecting to MongoDB...');
