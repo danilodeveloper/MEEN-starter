@@ -1,14 +1,19 @@
-var express = require('express');
-var app = express();
-var http = require('http');
-var server = http.createServer(app);
+var express = require('express'),
+	app = express(),
+	bodyParser = require("body-parser"),
+    morgan = require("morgan"),
+    errorHandler = require("errorhandler"),
+    favicon = require("serve-favicon");
+
+app.set("port", process.env.PORT || 3000);
+var env = process.env.NODE_ENV || 'development';
+if ('development' == env) {
+	app.use(morgan());
+	app.use(errorHandler());
+}
+app.use(bodyParser());
 
 app.use(express.static(__dirname + '/web'));
-
-app.configure(function(){
-    app.use(express.bodyParser());
-    app.use(app.router);
-});
 
 global.config = require('./config');
 global.constants = require('./constants');
@@ -20,17 +25,7 @@ console.log('\tURL: ' + global.config.MONGO_URL);
 console.log('\tCollections:' + JSON.stringify(global.constants.MONGO_COLLECTIONS));
 global.db = require('mongojs').connect(global.config.MONGO_URL, global.constants.MONGO_COLLECTIONS);
 
-//routes
-require('./routes/api').bindRoutes(app);
-// require('./routes/web').bindRoutes(app);
-
-
-process.on('exit', function() {
-  console.log('App is exiting.');
+app.listen(app.get("port"), function() {
+	return console.log("Server listening on port " + app.get("port"));
 });
 
-
-//listen for requests
-server.listen(global.config.APP_PORT);
-console.log('Todo app - Version ' + global.constants.APP_VERSION);
-console.log('App started on port ' + global.config.APP_PORT);

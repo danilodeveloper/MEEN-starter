@@ -55,14 +55,6 @@ module.exports = function(grunt) {
                 dest: 'dist/web/stylesheets/styles.css'
             }
         },
-
-        compass: {
-            prod: {
-                options: {
-                    config: 'config.rb'
-                }
-            }
-        },
       
         copy: {
             build: {
@@ -186,7 +178,6 @@ module.exports = function(grunt) {
         'copy:build',
         'ember_handlebars',
         'concat',
-        'compass',
         'concat:cssOutput',
         'replace:common',
         // 'clean:removescss',
